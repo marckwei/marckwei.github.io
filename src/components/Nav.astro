@@ -1,0 +1,48 @@
+---
+import { homePath, pathFor, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  kind: 'home' | 'cves';
+}
+
+const { locale, kind } = Astro.props;
+const strings = ui[locale];
+const home = homePath(locale);
+const other = locale === 'en' ? 'zh' : 'en';
+const switchHref = pathFor(other, kind);
+
+const links = [
+  { href: `${home}#about`, label: strings.navAbout, id: 'about' },
+  { href: `${home}#research`, label: strings.navResearch, id: 'research' },
+  { href: `${home}#codebuddy`, label: strings.navAgent, id: 'agent' },
+  { href: kind === 'cves' ? pathFor(locale, 'cves') : `${home}#cves`, label: strings.navCves, id: 'cves' },
+  { href: `${home}#publications`, label: strings.navPapers, id: 'papers' },
+  { href: `${home}#timeline`, label: strings.navTimeline, id: 'timeline' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href={home}>
+      <span class="brand-mark" aria-hidden="true">XZ</span>
+      <span class="brand-name">Xiangwei Zhang</span>
+    </a>
+    <nav class="nav-links" aria-label={locale === 'zh' ? '页内' : 'Sections'}>
+      {
+        links.map((link) => (
+          <a href={link.href} aria-current={kind === 'cves' && link.id === 'cves' ? 'page' : undefined}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="nav-tools">
+      <a href={switchHref} hrefLang={other === 'zh' ? 'zh-CN' : 'en'}>{strings.langLabel}</a>
+      <button class="theme-toggle" id="theme-toggle" type="button">
+        <span class="when-light">{strings.themeDark}</span>
+        <span class="when-dark">{strings.themeLight}</span>
+      </button>
+    </div>
+  </div>
+</header>

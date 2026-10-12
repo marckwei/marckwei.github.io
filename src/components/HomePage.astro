@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from './Hero.astro';
+import ResearchCard from './ResearchCard.astro';
+import VulnAgent from './VulnAgent.astro';
+import CveList from './CveList.astro';
+import PublicationList from './PublicationList.astro';
+import Timeline from './Timeline.astro';
+import { cves, highlightCves } from '../data/cves';
+import { profile } from '../data/profile';
+import { research } from '../data/research';
+import { cvePath, tx, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+const highlights = highlightCves(cves);
+---
+
+<BaseLayout locale={locale} kind="home" title={profile.name} description={tx(locale, profile.bio)}>
+  <Hero locale={locale} />
+  <section class="wrap" id="research">
+    <div class="section-head">
+      <div>
+        <p class="kicker">{strings.researchKicker}</p>
+        <h2>{strings.researchTitle}</h2>
+      </div>
+    </div>
+    <div class="cards">
+      {research.map((area) => <ResearchCard locale={locale} area={area} />)}
+    </div>
+  </section>
+  <VulnAgent locale={locale} />
+  <section class="wrap" id="cves">
+    <div class="section-head">
+      <div>
+        <p class="kicker">{strings.cveKicker}</p>
+        <h2>{strings.cveTitle}</h2>
+      </div>
+      <a href={cvePath(locale)}>
+        {strings.cveAll} ({cves.length})
+      </a>
+    </div>
+    <CveList locale={locale} items={highlights} variant="cards" />
+  </section>
+  <PublicationList locale={locale} />
+  <Timeline locale={locale} />
+</BaseLayout>

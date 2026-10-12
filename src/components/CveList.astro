@@ -1,0 +1,73 @@
+---
+import { severity, type Cve } from '../data/cves';
+import { classLabel, domainLabel, tx, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  items: Cve[];
+  variant: 'cards' | 'rows';
+}
+
+const { locale, items, variant } = Astro.props;
+---
+
+{
+  variant === 'cards' ? (
+    <ul class="cve-cards">
+      {items.map((item) => (
+        <li class="cve-card">
+          <div class="cve-card-top">
+            <a class="cve-id" href={item.refs[0]?.url}>
+              {item.id}
+            </a>
+            {item.cvss != null && (
+              <span class="cvss" data-sev={severity(item.cvss)} title={item.vector}>
+                {item.cvss.toFixed(1)}
+              </span>
+            )}
+          </div>
+          <p class="cve-project">
+            {item.project} · {domainLabel(locale, item.domain)}
+          </p>
+          <p class="cve-title">{tx(locale, item.title)}</p>
+          <p class="cve-meta">
+            <span class="chip">{classLabel(locale, item.class)}</span>
+            {item.cwe && <span class="cwe">{item.cwe}</span>}
+          </p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <ul class="cve-rows">
+      {items.map((item) => (
+        <li id={item.id} data-cve data-domain={item.domain} data-class={item.class}>
+          <div class="cve-row-top">
+            <a class="cve-id" href={item.refs[0]?.url}>
+              {item.id}
+            </a>
+            {item.cvss != null && (
+              <span class="cvss" data-sev={severity(item.cvss)} title={item.vector}>
+                {item.cvss.toFixed(1)}
+              </span>
+            )}
+          </div>
+          <p class="cve-project">
+            {item.project}
+            {item.published ? ` · ${item.published}` : ''}
+          </p>
+          <p class="cve-title">{tx(locale, item.title)}</p>
+          <p class="cve-meta">
+            <span class="chip">{classLabel(locale, item.class)}</span>
+            <span class="chip">{domainLabel(locale, item.domain)}</span>
+            {item.cwe && <span class="cwe">{item.cwe}</span>}
+          </p>
+          <p class="cve-links">
+            {item.refs.map((link) => (
+              <a href={link.url}>{tx(locale, link.label)}</a>
+            ))}
+          </p>
+        </li>
+      ))}
+    </ul>
+  )
+}

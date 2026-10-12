@@ -1,0 +1,78 @@
+---
+import { earlier, papers } from '../data/publications';
+import { tx, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+
+function authors(text: string): string {
+  return text.replaceAll('Xiangwei Zhang', '<strong>Xiangwei Zhang</strong>');
+}
+---
+
+<section class="wrap" id="publications">
+  <div class="section-head">
+    <div>
+      <p class="kicker">{strings.papersKicker}</p>
+      <h2>{strings.papersTitle}</h2>
+    </div>
+  </div>
+  <ol class="cite-list">
+    {
+      papers.map((paper) => (
+        <li class="cite">
+          <a class="cite-title" href={paper.links[0]?.url}>
+            {paper.title}
+          </a>
+          <p class="cite-authors" set:html={authors(paper.authors)} />
+          <p class="cite-venue">{tx(locale, paper.venue)}</p>
+          {paper.venueDetail && <p class="cite-venue-detail">{tx(locale, paper.venueDetail)}</p>}
+          <p class="cite-links">
+            {paper.links.map((link) => (
+              <a href={link.url}>{tx(locale, link.label)}</a>
+            ))}
+          </p>
+          {paper.image && (
+            <details class="cite-figure">
+              <summary>{strings.diagram}</summary>
+              <img
+                src={paper.image.src}
+                width={paper.image.width}
+                height={paper.image.height}
+                alt={tx(locale, paper.image.alt)}
+              />
+            </details>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+  <h3 class="subhead">{strings.earlierTitle}</h3>
+  <div class="cite-list">
+    {
+      earlier.map((project) => (
+        <article class="cite">
+          <h3 class="cite-title">
+            {project.url ? <a href={project.url}>{project.name}</a> : project.name}
+          </h3>
+          <p class="cite-venue">{tx(locale, project.body)}</p>
+          {project.image && (
+            <details class="cite-figure">
+              <summary>{strings.diagram}</summary>
+              <img
+                src={project.image.src}
+                width={project.image.width}
+                height={project.image.height}
+                alt={tx(locale, project.image.alt)}
+              />
+            </details>
+          )}
+        </article>
+      ))
+    }
+  </div>
+</section>

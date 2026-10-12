@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile';
+import { otherLocale, pathFor, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  kind: 'home' | 'cves';
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { locale, kind, title, description, noindex = false } = Astro.props;
+const htmlLang = locale === 'zh' ? 'zh-CN' : 'en';
+const fullTitle = title === profile.name ? title : `${title} — ${profile.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const enHref = new URL(pathFor('en', kind), Astro.site);
+const zhHref = new URL(pathFor('zh', kind), Astro.site);
+const alternate = new URL(pathFor(otherLocale(locale), kind), Astro.site);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  alternateName: profile.nameZh,
+  jobTitle: profile.role.en,
+  worksFor: { '@type': 'Organization', name: profile.org.en },
+  url: 'https://marckwei.github.io/',
+  email: profile.email,
+  sameAs: [profile.githubUrl],
+};
+---
+
+<!doctype html>
+<html lang={htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical.href} />
+    <link rel="alternate" hreflang="en" href={enHref.href} />
+    <link rel="alternate" hreflang="zh-CN" href={zhHref.href} />
+    <link rel="alternate" hreflang="x-default" href={enHref.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    <meta property="og:locale:alternate" content={locale === 'zh' ? 'en_US' : 'zh_CN'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#content">{locale === 'zh' ? '跳到正文' : 'Skip to content'}</a>
+    <Nav locale={locale} kind={kind} />
+    <main id="content">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <script>
+      const button = document.getElementById('theme-toggle');
+      button?.addEventListener('click', () => {
+        const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          /* storage unavailable */
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CveList from './CveList.astro';
+import { cves, cvesByGroup, presentClasses, presentDomains, type CveGroup } from '../data/cves';
+import { classLabel, domainLabel, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+const groups = cvesByGroup(cves);
+const domains = presentDomains(cves);
+const classes = presentClasses(cves);
+
+const groupTitle: Record<CveGroup, string> = {
+  agent: strings.groupAgent,
+  browser: strings.groupBrowser,
+  academic: strings.groupAcademic,
+};
+---
+
+<BaseLayout locale={locale} kind="cves" title={strings.cvePageTitle} description={strings.cvePageLead}>
+  <div class="wrap" data-cve-browser>
+    <header class="page-intro">
+      <p class="kicker">{strings.cveKicker}</p>
+      <h1>{strings.cvePageTitle}</h1>
+      <p class="page-lead">
+        {strings.cvePageLead}
+        {locale === 'zh' ? ` 共 ${cves.length} 条。` : ` ${cves.length} entries.`}
+      </p>
+    </header>
+    <div class="filters">
+      <div class="filter-row">
+        <span class="filter-label">{strings.filterDomain}</span>
+        <button type="button" data-domain-filter="all" aria-pressed="true">{strings.filterAll}</button>
+        {
+          domains.map((domain) => (
+            <button type="button" data-domain-filter={domain} aria-pressed="false">
+              {domainLabel(locale, domain)}
+            </button>
+          ))
+        }
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">{strings.filterClass}</span>
+        <button type="button" data-class-filter="all" aria-pressed="true">{strings.filterAll}</button>
+        {
+          classes.map((name) => (
+            <button type="button" data-class-filter={name} aria-pressed="false">
+              {classLabel(locale, name)}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+    <p data-empty hidden>{strings.noMatch}</p>
+    {
+      groups.map((group) => (
+        <section data-group>
+          <h2>
+            {groupTitle[group.group]}
+            <span class="group-count">({group.items.length})</span>
+          </h2>
+          <CveList locale={locale} items={group.items} variant="rows" />
+        </section>
+      ))
+    }
+  </div>
+  <script>
+    const root = document.querySelector('[data-cve-browser]');
+    if (root) {
+      let domain = 'all';
+      let bugClass = 'all';
+      const apply = () => {
+        let any = false;
+        for (const group of root.querySelectorAll('[data-group]')) {
+          let visible = false;
+          for (const row of group.querySelectorAll('[data-cve]')) {
+            if (!(row instanceof HTMLElement)) continue;
+            const ok =
+              (domain === 'all' || row.dataset.domain === domain) &&
+              (bugClass === 'all' || row.dataset.class === bugClass);
+            row.hidden = !ok;
+            if (ok) visible = true;
+          }
+          if (group instanceof HTMLElement) group.hidden = !visible;
+          if (visible) any = true;
+        }
+        const empty = root.querySelector('[data-empty]');
+        if (empty instanceof HTMLElement) empty.hidden = any;
+      };
+      root.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const domainButton = target.closest('[data-domain-filter]');
+        const classButton = target.closest('[data-class-filter]');
+        const button = domainButton ?? classButton;
+        if (!(button instanceof HTMLElement)) return;
+        if (domainButton) domain = domainButton.getAttribute('data-domain-filter') ?? 'all';
+        if (classButton) bugClass = classButton.getAttribute('data-class-filter') ?? 'all';
+        button.parentElement?.querySelectorAll('button').forEach((item) => {
+          item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+        });
+        apply();
+      });
+    }
+  </script>
+</BaseLayout>

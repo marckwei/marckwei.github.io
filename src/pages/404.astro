@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ui } from '../i18n/ui';
+
+const strings = ui.en;
+---
+
+<BaseLayout locale="en" kind="home" title={strings.notFoundTitle} description={strings.notFoundBody} noindex>
+  <div class="wrap not-found">
+    <h1>{strings.notFoundTitle}</h1>
+    <p>{strings.notFoundBody}</p>
+    <p>
+      <a href="/">{strings.backHome}</a>
+      · <a href="/zh/">{ui.zh.backHome}</a>
+    </p>
+  </div>
+</BaseLayout>

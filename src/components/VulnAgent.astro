@@ -1,0 +1,36 @@
+---
+import { engineCopy } from '../data/research';
+import { tx, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+---
+
+<section class="wrap" id="codebuddy">
+  <div class="section-head">
+    <div>
+      <p class="kicker">{strings.agentKicker}</p>
+      <h2>{strings.agentTitle}</h2>
+    </div>
+  </div>
+  <p class="lead">{tx(locale, engineCopy.intro)}</p>
+  <ol class="pillars">
+    {
+      engineCopy.pillars.map((pillar) => (
+        <li class="card pillar">
+          <p class="kicker">{tx(locale, pillar.label)}</p>
+          <h3>{tx(locale, pillar.title)}</h3>
+          <p>{tx(locale, pillar.body)}</p>
+          <p class="pillar-read">
+            <a href={pillar.article.url} lang="zh-CN">{pillar.article.title}</a>
+            <span>{tx(locale, pillar.article.source)}</span>
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
