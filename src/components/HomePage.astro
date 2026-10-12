@@ -19,7 +19,7 @@ const highlights = highlightCves(cves);
 const vendorLine = strings.cveVendorLine.replace('{vendors}', cveStats(cves).vendors.join(' · '));
 ---
 
-<BaseLayout locale={locale} kind="home" title={profile.name} description={tx(locale, profile.bio)}>
+<BaseLayout locale={locale} kind="home" title={strings.homeTitle} description={tx(locale, profile.bio)}>
   <Hero locale={locale} />
   <Timeline locale={locale} />
   <CodeBuddyTeaser locale={locale} />

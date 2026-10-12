@@ -15,7 +15,8 @@ interface Props {
 
 const { locale, kind, title, description, noindex = false } = Astro.props;
 const htmlLang = locale === 'zh' ? 'zh-CN' : 'en';
-const fullTitle = title === profile.name ? title : `${title} — ${profile.name}`;
+const siteName = locale === 'zh' ? profile.nameZh : profile.name;
+const fullTitle = kind === 'home' && !noindex ? title : `${title} — ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const enHref = new URL(pathFor('en', kind), Astro.site);
 const zhHref = new URL(pathFor('zh', kind), Astro.site);

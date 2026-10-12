@@ -9,8 +9,6 @@
   --accent: #9a3f1a;
   --accent-2: #7a3014;
   --chip: #f0e7dc;
-  --mark: #1c1915;
-  --mark-ink: #f4f1ea;
   --shadow: 0 1px 0 rgba(28, 25, 21, 0.04);
   --critical: #9f1239;
   --critical-bg: #fde8ee;
@@ -38,8 +36,6 @@
   --accent: #e39a72;
   --accent-2: #f0c2a8;
   --chip: #2a2521;
-  --mark: #f3efe6;
-  --mark-ink: #141311;
   --shadow: none;
   --critical: #fda4af;
   --critical-bg: #3f1d29;
@@ -63,8 +59,6 @@
     --accent: #e39a72;
     --accent-2: #f0c2a8;
     --chip: #2a2521;
-    --mark: #f3efe6;
-    --mark-ink: #141311;
     --shadow: none;
     --critical: #fda4af;
     --critical-bg: #3f1d29;
@@ -165,27 +159,17 @@ a:hover {
 }
 
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
   color: inherit;
   text-decoration: none;
   font-family: var(--serif);
+  font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   flex: 0 0 auto;
 }
 
-.brand-mark {
-  width: 1.85rem;
-  height: 1.85rem;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--mark);
-  color: var(--mark-ink);
-  font-size: 0.68rem;
-  letter-spacing: 0.02em;
+.brand:lang(zh) {
+  letter-spacing: 0.08em;
 }
 
 .nav-links {
@@ -999,6 +983,10 @@ a.cite-title:hover,
     width: 100%;
     margin-left: 0;
     padding-bottom: 0.35rem;
+  }
+
+  .nav-tools {
+    margin-left: auto;
   }
 }
 

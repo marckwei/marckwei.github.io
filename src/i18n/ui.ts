@@ -54,6 +54,7 @@ export type ClassId = keyof typeof bugClass;
 export const ui = {
   en: {
     skip: 'Skip to content',
+    homeTitle: 'Xiangwei Zhang · Security Researcher',
     navAbout: 'About',
     navAgent: 'CodeBuddy',
     navCves: 'CVEs',
@@ -96,6 +97,7 @@ export const ui = {
   },
   zh: {
     skip: '跳到正文',
+    homeTitle: '张向伟 · 安全研究员',
     navAbout: '关于',
     navAgent: 'CodeBuddy',
     navCves: '漏洞',
