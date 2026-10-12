@@ -14,12 +14,20 @@ export function cvePath(locale: Locale): string {
   return locale === 'zh' ? '/zh/cves/' : '/cves/';
 }
 
+export function codebuddyPath(locale: Locale): string {
+  return locale === 'zh' ? '/zh/codebuddy/' : '/codebuddy/';
+}
+
 export function otherLocale(locale: Locale): Locale {
   return locale === 'en' ? 'zh' : 'en';
 }
 
-export function pathFor(locale: Locale, kind: 'home' | 'cves'): string {
-  return kind === 'cves' ? cvePath(locale) : homePath(locale);
+export type PageKind = 'home' | 'cves' | 'codebuddy';
+
+export function pathFor(locale: Locale, kind: PageKind): string {
+  if (kind === 'cves') return cvePath(locale);
+  if (kind === 'codebuddy') return codebuddyPath(locale);
+  return homePath(locale);
 }
 
 const domain = {
@@ -47,21 +55,19 @@ export const ui = {
   en: {
     skip: 'Skip to content',
     navAbout: 'About',
-    navResearch: 'Research',
     navAgent: 'CodeBuddy',
     navCves: 'CVEs',
     navPapers: 'Papers',
-    navTimeline: 'Timeline',
+    navTimeline: 'Experience',
     langLabel: '中文',
     themeDark: 'Dark',
     themeLight: 'Light',
     github: 'GitHub',
     email: 'Email',
-    statVendors: 'Vulnerabilities confirmed and fixed by',
-    researchKicker: 'Focus',
-    researchTitle: 'What I work on',
-    agentKicker: 'What I build',
-    agentTitle: 'The CodeBuddy Security audit engine',
+    cveVendorLine: 'Major vendors involved, all confirmed and fixed: {vendors}.',
+    agentKicker: 'Featured project',
+    agentTitle: 'CodeBuddy Security',
+    agentMore: 'Details',
     cveKicker: 'Vulnerabilities',
     cveTitle: 'Selected CVEs',
     cveAll: 'All CVEs',
@@ -70,7 +76,7 @@ export const ui = {
     earlierTitle: 'Earlier research',
     diagram: 'Workflow diagram',
     timelineKicker: 'Background',
-    timelineTitle: 'Experience',
+    timelineTitle: 'Experience and education',
     filterDomain: 'Domain',
     filterClass: 'Class',
     filterAll: 'All',
@@ -91,7 +97,6 @@ export const ui = {
   zh: {
     skip: '跳到正文',
     navAbout: '关于',
-    navResearch: '方向',
     navAgent: 'CodeBuddy',
     navCves: '漏洞',
     navPapers: '论文',
@@ -101,11 +106,10 @@ export const ui = {
     themeLight: '浅色',
     github: 'GitHub',
     email: '邮箱',
-    statVendors: '漏洞获以下主要厂商确认并修复',
-    researchKicker: '领域',
-    researchTitle: '关注的方向',
-    agentKicker: '负责研发',
-    agentTitle: 'CodeBuddy Security 审计引擎',
+    cveVendorLine: '涉及的主要厂商（均已确认并修复）：{vendors}',
+    agentKicker: '代表项目',
+    agentTitle: 'CodeBuddy Security',
+    agentMore: '查看详情',
     cveKicker: '漏洞',
     cveTitle: '代表性 CVE',
     cveAll: '全部 CVE',
@@ -114,7 +118,7 @@ export const ui = {
     earlierTitle: '更早的研究',
     diagram: '流程图',
     timelineKicker: '履历',
-    timelineTitle: '经历',
+    timelineTitle: '工作与教育经历',
     filterDomain: '领域',
     filterClass: '类型',
     filterAll: '全部',

@@ -1,5 +1,4 @@
 ---
-import { cveStats, cves } from '../data/cves';
 import { profile } from '../data/profile';
 import { tx, ui, type Locale } from '../i18n/ui';
 
@@ -9,20 +8,21 @@ interface Props {
 
 const { locale } = Astro.props;
 const strings = ui[locale];
-const stats = cveStats(cves);
 ---
 
 <header class="hero wrap" id="about">
-  <div class="mark" aria-hidden="true">XZ</div>
-  <div>
-    <h1>
-      <span class="name-en">{profile.name}</span>
-      <span class="name-zh">{profile.nameZh}</span>
-    </h1>
-    <p class="role">
-      <strong>{tx(locale, profile.role)}</strong>
-      <span> · {tx(locale, profile.org)}</span>
-    </p>
+  <img
+    class="portrait"
+    src="/images/portrait.jpg"
+    alt={locale === 'zh' ? `${profile.nameZh}的照片` : `Photo of ${profile.name}`}
+    width="360"
+    height="450"
+  />
+  <h1 class="hero-name">
+    <span class="name-en">{profile.name}</span>
+    <span class="name-zh">{profile.nameZh}</span>
+  </h1>
+  <div class="hero-body">
     <p class="bio">{tx(locale, profile.bio)}</p>
     <ul class="links">
       <li><a href={profile.githubUrl}>{strings.github}</a></li>
@@ -30,9 +30,3 @@ const stats = cveStats(cves);
     </ul>
   </div>
 </header>
-<div class="wrap vendor-strip">
-  <p class="kicker">{strings.statVendors}</p>
-  <ul class="vendor-list">
-    {stats.vendors.map((vendor) => <li>{vendor}</li>)}
-  </ul>
-</div>

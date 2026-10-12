@@ -52,27 +52,35 @@ function authors(text: string): string {
     }
   </ol>
   <h3 class="subhead">{strings.earlierTitle}</h3>
-  <div class="cite-list">
+  <ol class="cite-list">
     {
-      earlier.map((project) => (
-        <article class="cite">
-          <h3 class="cite-title">
-            {project.url ? <a href={project.url}>{project.name}</a> : project.name}
-          </h3>
-          <p class="cite-venue">{tx(locale, project.body)}</p>
-          {project.image && (
+      earlier.map((paper) => (
+        <li class="cite">
+          <a class="cite-title" href={paper.links[0]?.url}>
+            {paper.title}
+          </a>
+          <p class="cite-authors" set:html={authors(paper.authors)} />
+          <p class="cite-venue">{tx(locale, paper.venue)}</p>
+          {paper.venueDetail && <p class="cite-venue-detail">{tx(locale, paper.venueDetail)}</p>}
+          {paper.note && <p class="cite-venue">{tx(locale, paper.note)}</p>}
+          <p class="cite-links">
+            {paper.links.map((link) => (
+              <a href={link.url}>{tx(locale, link.label)}</a>
+            ))}
+          </p>
+          {paper.image && (
             <details class="cite-figure">
               <summary>{strings.diagram}</summary>
               <img
-                src={project.image.src}
-                width={project.image.width}
-                height={project.image.height}
-                alt={tx(locale, project.image.alt)}
+                src={paper.image.src}
+                width={paper.image.width}
+                height={paper.image.height}
+                alt={tx(locale, paper.image.alt)}
               />
             </details>
           )}
-        </article>
+        </li>
       ))
     }
-  </div>
+  </ol>
 </section>

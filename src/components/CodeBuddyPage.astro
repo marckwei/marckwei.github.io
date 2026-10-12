@@ -1,0 +1,140 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CveList from './CveList.astro';
+import { codebuddy } from '../data/codebuddy';
+import { cves, cvesByGroup } from '../data/cves';
+import { cvePath, tx, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+const agentCves = cvesByGroup(cves).find((group) => group.group === 'agent')?.items ?? [];
+const { source, method, evaluation, work } = codebuddy;
+---
+
+<BaseLayout locale={locale} kind="codebuddy" title={strings.agentTitle} description={tx(locale, codebuddy.summary)}>
+  <article class="wrap detail">
+    <header class="page-intro">
+      <p class="kicker">{strings.agentKicker}</p>
+      <h1>{strings.agentTitle}</h1>
+      <p class="page-lead">{tx(locale, codebuddy.intro)}</p>
+    </header>
+
+    <figure class="stats-block stats-page">
+      <figcaption>{tx(locale, codebuddy.statsNote)}</figcaption>
+      <dl class="stats">
+        {
+          codebuddy.stats.map((stat) => (
+            <div class="stat">
+              <dt>{tx(locale, stat.value)}</dt>
+              <dd>{tx(locale, stat.label)}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </figure>
+    <p class="stats-note">
+      {tx(locale, source.before)}<a href={source.article.url} lang="zh-CN">《{source.article.title}》</a>{tx(locale, source.after)}
+    </p>
+
+    <section>
+      <h2 class="col-title">{tx(locale, codebuddy.stagesTitle)}</h2>
+      <p class="col-note">{tx(locale, codebuddy.stagesNote)}</p>
+      <ol class="stages">
+        {
+          codebuddy.stages.map((stage) => (
+            <li class="stage">
+              <p class="stage-date">{tx(locale, stage.label)}</p>
+              <div>
+                <h3>{tx(locale, stage.title)}</h3>
+                <p>{tx(locale, stage.body)}</p>
+                <p class="stage-read">
+                  <a href={stage.article.url} lang="zh-CN">{stage.article.title}</a>
+                  <span>{tx(locale, stage.article.source)}</span>
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="prose">
+      <p class="kicker">{tx(locale, method.kicker)}</p>
+      <h2 class="col-title">{tx(locale, method.title)}</h2>
+      <p>{tx(locale, method.lead)}</p>
+      <blockquote class="rule">{tx(locale, method.rule)}</blockquote>
+      {method.paras.map((para) => <p>{tx(locale, para)}</p>)}
+      <div class="halves">
+        <div class="card">
+          <h3>{tx(locale, method.intelTitle)}</h3>
+          <dl class="channels">
+            {
+              method.channels.map((channel) => (
+                <div>
+                  <dt>{tx(locale, channel.name)}</dt>
+                  <dd>{tx(locale, channel.body)}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div class="card">
+          <h3>{tx(locale, method.auditTitle)}</h3>
+          <ol class="steps">
+            {method.auditSteps.map((step) => <li>{tx(locale, step)}</li>)}
+          </ol>
+        </div>
+      </div>
+      <p class="aside">{tx(locale, method.example)}</p>
+      <p>{tx(locale, method.platform)}</p>
+    </section>
+
+    <section class="prose">
+      <p class="kicker">{tx(locale, evaluation.kicker)}</p>
+      <h2 class="col-title">{tx(locale, evaluation.title)}</h2>
+      {evaluation.paras.map((para) => <p>{tx(locale, para)}</p>)}
+      <h3 class="col-sub">{tx(locale, evaluation.guardsTitle)}</h3>
+      <ol class="steps">
+        {evaluation.guards.map((guard) => <li>{tx(locale, guard)}</li>)}
+      </ol>
+      <ul class="results">
+        {
+          evaluation.results.map((result) => (
+            <li class="card">
+              <h3>{tx(locale, result.name)}</h3>
+              <p>{tx(locale, result.body)}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section>
+      <p class="kicker">{tx(locale, work.kicker)}</p>
+      <h2 class="col-title">{tx(locale, work.title)}</h2>
+      <ul class="work-list">
+        {work.items.map((item) => <li>{tx(locale, item)}</li>)}
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <p class="kicker">{tx(locale, codebuddy.cves.kicker)}</p>
+          <h2>
+            {tx(locale, codebuddy.cves.title)}
+            <span class="group-count">({agentCves.length})</span>
+          </h2>
+        </div>
+        <a href={cvePath(locale)}>
+          {strings.cveAll} ({cves.length})
+        </a>
+      </div>
+      <CveList locale={locale} items={agentCves} variant="rows" />
+    </section>
+  </article>
+</BaseLayout>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CveList from './CveList.astro';
-import { cves, cvesByGroup, presentClasses, presentDomains, type CveGroup } from '../data/cves';
+import { cveStats, cves, cvesByGroup, presentClasses, presentDomains, type CveGroup } from '../data/cves';
 import { classLabel, domainLabel, ui, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -13,6 +13,7 @@ const strings = ui[locale];
 const groups = cvesByGroup(cves);
 const domains = presentDomains(cves);
 const classes = presentClasses(cves);
+const vendorLine = strings.cveVendorLine.replace('{vendors}', cveStats(cves).vendors.join(' · '));
 
 const groupTitle: Record<CveGroup, string> = {
   agent: strings.groupAgent,
@@ -30,6 +31,7 @@ const groupTitle: Record<CveGroup, string> = {
         {strings.cvePageLead}
         {locale === 'zh' ? ` 共 ${cves.length} 条。` : ` ${cves.length} entries.`}
       </p>
+      <p class="page-lead">{vendorLine}</p>
     </header>
     <div class="filters">
       <div class="filter-row">

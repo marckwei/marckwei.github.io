@@ -25,7 +25,24 @@ const strings = ui[locale];
             <p class="period">{tx(locale, item.period)}</p>
             <h3>{tx(locale, item.title)}</h3>
             <p class="org">{tx(locale, item.org)}</p>
-            <p>{tx(locale, item.body)}</p>
+            {item.body && <p>{tx(locale, item.body)}</p>}
+            {item.tracks && (
+              <div class="tracks">
+                {item.tracks.map((track) => (
+                  <div class="track">
+                    <div class="track-head">
+                      <h4>{tx(locale, track.title)}</h4>
+                      <span class="period">{tx(locale, track.period)}</span>
+                    </div>
+                    <ul>
+                      {track.points.map((point) => (
+                        <li>{tx(locale, point)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </li>
       ))

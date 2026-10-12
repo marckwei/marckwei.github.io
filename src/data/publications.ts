@@ -10,14 +10,8 @@ export interface Paper {
   authors: string;
   venue: L10n;
   venueDetail?: L10n;
+  note?: L10n;
   links: PaperLink[];
-  image?: { src: string; width: number; height: number; alt: L10n };
-}
-
-export interface EarlierProject {
-  name: string;
-  url?: string;
-  body: L10n;
   image?: { src: string; width: number; height: number; alt: L10n };
 }
 
@@ -27,10 +21,18 @@ const code: L10n = { en: 'Code', zh: '代码' };
 export const papers: Paper[] = [
   {
     title: 'PatchFuzz: Patch Fuzzing for JavaScript Engines',
-    authors: 'Junjie Wang, Yuhan Ma, Xiaofei Xie, Xiaoning Du, Xiangwei Zhang',
-    venue: { en: 'arXiv, 2025', zh: 'arXiv，2025' },
+    authors: 'Junjie Wang, Zhihua Xie, Xiaofei Xie, Xiaoning Du, Xiangwei Zhang',
+    venue: {
+      en: 'Information and Software Technology, vol. 194, 2026',
+      zh: 'Information and Software Technology，第 194 卷，2026',
+    },
+    venueDetail: {
+      en: 'Journal article 108087. Preprint: arXiv:2505.00289.',
+      zh: '期刊论文，文章编号 108087。预印本：arXiv:2505.00289。',
+    },
     links: [
-      paperLink(paper, 'https://arxiv.org/abs/2505.00289'),
+      paperLink(paper, 'https://doi.org/10.1016/j.infsof.2026.108087'),
+      { label: { en: 'arXiv', zh: 'arXiv' }, url: 'https://arxiv.org/abs/2505.00289' },
       paperLink(code, 'https://github.com/PatchFuzz/patchfuzz'),
     ],
     image: {
@@ -69,14 +71,22 @@ export const papers: Paper[] = [
   },
 ];
 
-export const earlier: EarlierProject[] = [
+export const earlier: Paper[] = [
   {
-    name: 'FuzzJIT',
-    url: 'https://github.com/SpaceNaN/fuzzjit',
-    body: {
-      en: 'Oracle-enhanced fuzzing for JavaScript JIT compilers, built on Fuzzilli. My advisor Junjie Wang and collaborators are the primary authors; I contributed coverage and the other evaluation metrics, and used it to find logic bugs.',
-      zh: '基于 Fuzzilli、带测试预言（oracle）的 JavaScript JIT 模糊测试工具。主要作者是导师王俊杰及合作者；我负责覆盖率等评估指标，并用它发现了若干逻辑问题。',
+    title: 'FuzzJIT: Oracle-Enhanced Fuzzing for JavaScript Engine JIT Compiler',
+    authors: 'Junjie Wang, Zhiyi Zhang, Shuang Liu, Xiaoning Du, Junjie Chen',
+    venue: {
+      en: 'USENIX Security 2023, pp. 1865–1882',
+      zh: 'USENIX Security 2023，第 1865–1882 页',
     },
+    note: {
+      en: 'Authors are my advisor Junjie Wang and collaborators. I was responsible for the experimental part, and used the tool to find several bugs.',
+      zh: '作者是导师王俊杰及合作者。我负责实验部分，并用它发现了若干漏洞。',
+    },
+    links: [
+      paperLink(paper, 'https://www.usenix.org/conference/usenixsecurity23/presentation/wang-junjie'),
+      paperLink(code, 'https://github.com/SpaceNaN/fuzzjit'),
+    ],
     image: {
       src: '/images/fuzzjit_workflow.png',
       width: 1235,

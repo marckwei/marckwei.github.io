@@ -1,0 +1,37 @@
+---
+import { codebuddy } from '../data/codebuddy';
+import { codebuddyPath, tx, ui, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const strings = ui[locale];
+---
+
+<section class="wrap" id="codebuddy">
+  <div class="section-head">
+    <div>
+      <p class="kicker">{strings.agentKicker}</p>
+      <h2>{strings.agentTitle}</h2>
+    </div>
+    <a href={codebuddyPath(locale)}>{strings.agentMore} →</a>
+  </div>
+  <div class="card teaser">
+    <p class="lead">{tx(locale, codebuddy.summary)}</p>
+    <figure class="stats-block">
+      <figcaption>{tx(locale, codebuddy.statsNote)}</figcaption>
+      <dl class="stats">
+        {
+          codebuddy.stats.map((stat) => (
+            <div class="stat">
+              <dt>{tx(locale, stat.value)}</dt>
+              <dd>{tx(locale, stat.label)}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </figure>
+  </div>
+</section>
