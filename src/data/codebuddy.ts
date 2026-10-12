@@ -56,7 +56,7 @@ export const codebuddy = {
       label: { en: 'model calls', zh: '次模型调用' },
     },
     {
-      value: { en: '25,000', zh: '2.5 万' },
+      value: { en: '25,000+', zh: '25,000+' },
       label: { en: 'vulnerability findings', zh: '条漏洞线索' },
     },
     {
@@ -150,8 +150,8 @@ export const codebuddy = {
     title: { en: 'Measured on real projects with known answers', zh: '在答案已知的真实项目上评测' } satisfies L10n,
     paras: [
       {
-        en: 'On the internal developer preview, the engine has driven about 8 million model calls and accumulated 25,000 findings, more than 3,200 of them reproduced in real environments with engine-written PoCs. Real scans, though, only show what was found, not what was missed. Measuring detection needs a test set with known answers.',
-        zh: '在内部开发体验环境中，引擎累计约 800 万次模型调用，积累 2.5 万条漏洞线索，其中 3,200 余条由引擎自动生成 PoC 并在真实环境复现成功。不过，真实扫描只能告诉我们找到了什么，无法告诉我们还有多少没找到；要衡量检出能力，需要答案已知的测试集作为参照。',
+        en: 'On the internal developer preview, the engine has driven about 8 million model calls and accumulated more than 25,000 findings, more than 3,200 of them reproduced in real environments with engine-written PoCs. Real scans, though, only show what was found, not what was missed. Measuring detection needs a test set with known answers.',
+        zh: '在内部开发体验环境中，引擎累计约 800 万次模型调用，积累 25,000 余条漏洞线索，其中 3,200 余条由引擎自动生成 PoC 并在真实环境复现成功。不过，真实扫描只能告诉我们找到了什么，无法告诉我们还有多少没找到；要衡量检出能力，需要答案已知的测试集作为参照。',
       },
       {
         en: 'How a test set is built decides what it measures. CyberGym, widely used, by default hands the system the vulnerable source and a description and asks for a triggering PoC, so it measures how to reproduce a known bug. Synthetic targets have designed bugs, while real projects have evolved ones: targets carry far more bugs per line, mostly planted from known patterns, and suit enumeration and pattern matching better than discovery in ordinary code.',
