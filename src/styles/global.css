@@ -233,34 +233,7 @@ main {
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "photo name"
-    "photo body";
-  column-gap: 1.75rem;
-  align-items: start;
   padding-top: 3.5rem;
-}
-
-.hero-name {
-  grid-area: name;
-}
-
-.hero-body {
-  grid-area: body;
-}
-
-.portrait {
-  grid-area: photo;
-  width: 9.5rem;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  object-fit: cover;
 }
 
 .kicker {
@@ -956,18 +929,7 @@ a.cite-title:hover,
   }
 
   .hero {
-    grid-template-rows: auto auto;
-    grid-template-areas:
-      "photo name"
-      "body body";
-    column-gap: 1rem;
-    align-items: center;
     padding-top: 2.2rem;
-  }
-
-  .portrait {
-    width: 4.75rem;
-    border-radius: 10px;
   }
 
   .hero-name {
